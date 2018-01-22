@@ -95,9 +95,9 @@ class CurlHelper
      */
     public static function getCurlOptionFromResponse(Response $response, $option = 0)
     {
+        $info = array();
         switch ($option) {
             case 0: // 0 == array of all curl options
-                $info = array();
                 foreach (self::$curlInfoList as $option => $key) {
                     $info[$key] = $response->getCurlInfo($key);
                 }
@@ -112,7 +112,9 @@ class CurlHelper
                 $info =  mb_strlen(HttpUtil::formatAsStatusWithHeadersString($response), 'ISO-8859-1');
                 break;
             default:
-                $info = $response->getCurlInfo(self::$curlInfoList[$option]);
+                if (array_key_exists($option, self::$curlInfoList)) {
+                    $info = $response->getCurlInfo(self::$curlInfoList[$option]);
+                }
                 break;
         }
 
